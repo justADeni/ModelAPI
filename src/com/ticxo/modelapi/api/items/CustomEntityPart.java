@@ -2,36 +2,38 @@ package com.ticxo.modelapi.api.items;
 
 import java.util.HashMap;
 
-import com.chrismin13.additionsapi.items.textured.CustomTexturedItem;
-import com.ticxo.modelapi.api.ModelRenderer;
+import org.bukkit.Material;
 
-import us.fihgu.toolbox.item.DamageableItem;
+import com.chrismin13.additionsapi.items.CustomItem;
+
 import us.fihgu.toolbox.item.ModelInjection;
-import us.fihgu.toolbox.resourcepack.model.Predicate;
+import us.fihgu.toolbox.item.ModelInjector;
 
-public class CustomEntityPart extends CustomTexturedItem {
+public class CustomEntityPart extends CustomItem implements ModelInjector {
 
-	private final HashMap<String, Short> overrideModels = new HashMap<String, Short>();
-	private ModelRenderer model;
-	
-	public CustomEntityPart(DamageableItem dItem, String idName, String defaultTexture, ModelRenderer model) {
-		super(dItem, idName, defaultTexture);
-		this.model = model;
+	public CustomEntityPart(Material material, int amount, short durability, String idName) {
+		super(material, amount, durability, idName);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public HashMap<String, Short> getAllTextures() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDefaultTexture() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public HashMap<ModelInjection, Short> getOverrideEntries() {
-
-		HashMap<ModelInjection, Short> map = new HashMap<ModelInjection, Short>();
-		String name = getIdName().split(":")[0];
-		for (String texture : overrideModels.keySet()) {
-			texture = texture.toLowerCase();
-			map.put(new ModelInjection(new Predicate(), name + ":item/" + texture,
-					EntityModel.createEntityPartModel(name, model)),
-					(Short) overrideModels.get(texture));
-		}
-		return map;
-
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	
 
 }
