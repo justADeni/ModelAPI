@@ -1,5 +1,7 @@
 package com.ticxo.modelapi.api;
 
+import us.fihgu.toolbox.resourcepack.model.ElementFaceEntry;
+
 public class TextureUV {
 
 	private Double x;
@@ -47,5 +49,36 @@ public class TextureUV {
 	public void setoY(Double oY) {
 		this.oY = oY;
 	}
+	
+	public ElementFaceEntry getElementFaceEntry() {
+		
+		ElementFaceEntry face = new ElementFaceEntry();
+		face.setUv(new double[] {x, y, oX, oY});
+		
+		return face;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
