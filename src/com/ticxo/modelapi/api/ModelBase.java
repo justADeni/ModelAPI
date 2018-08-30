@@ -25,7 +25,7 @@ public class ModelBase {
 	
 	public void generateJsons() {
 		
-		for(ModelRenderer m : parts) m.generateModel();
+		//for(ModelRenderer m : parts) m.generateModel();
 		
 	}
 	

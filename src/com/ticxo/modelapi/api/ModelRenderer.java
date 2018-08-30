@@ -1,5 +1,8 @@
 package com.ticxo.modelapi.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.util.EulerAngle;
 
 public class ModelRenderer {
@@ -59,14 +62,6 @@ public class ModelRenderer {
 
 		this.mirror = mirror;
 
-	}
-
-	// Generate resource pack usable model file
-	public void generateModel() {
-
-		JsonModel j = new JsonModel(this);
-		j.exportJson();
-		
 	}
 
 	public Box getBox() {
