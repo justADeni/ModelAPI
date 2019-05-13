@@ -1,3 +1,5 @@
 name: ModelAPI
-main: com.ticxo.modelapi.Main
+main: com.ticxo.modelapi.ModelAPI
 version: 0.1
+depend: [AdditionsAPI]
+api-version: 1.13

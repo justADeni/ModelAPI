@@ -1,62 +1,94 @@
 package com.ticxo.modelapi.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.ticxo.modelapi.ModelAPI;
+import com.ticxo.modelapi.api.additions.EntityModelPart;
+import com.ticxo.modelapi.api.modeling.ModelBase;
+import com.ticxo.modelapi.api.modeling.ModelEntity;
+
 public class ModelManager {
 
-	private JavaPlugin plugin;
-	private Map<String, ModelBase> regModels = new HashMap<String, ModelBase>();
-	private Map<Entity, String> entityModels = new HashMap<Entity, String>();
-	private BukkitRunnable apply;
+	private static Map<String, ModelBase> models = new HashMap<String, ModelBase>();
+	private static List<EntityModelPart> modelParts = new ArrayList<EntityModelPart>();
+	private static List<ModelEntity> entityList = new ArrayList<ModelEntity>();
+	private static Map<JavaPlugin, String> textureMap = new HashMap<JavaPlugin, String>();
 
-	public ModelManager(JavaPlugin plugin) {
+	private static BukkitRunnable renderer;
 
-		this.plugin = plugin;
-		
-		apply = new BukkitRunnable() {
-			public void run() {
-				Iterator<Entry<Entity, String>> it = entityModels.entrySet().iterator();
-				while (it.hasNext()) {
-					Map.Entry<Entity, String> p = (Map.Entry<Entity, String>)it.next();
-					teleportModel(p.getKey(), p.getValue());
-					it.remove();
-				}
-			}
-		};
-		
-		apply.runTaskTimer(plugin, 0, 1);
-		
-	}
+	public static void registerModel(ModelBase model) {
 
-	public void registerModel(String id, ModelBase model) {
-
-		regModels.put(id, model);
+		models.put(model.getId(), model);
 
 	}
 
-	public void registerModel(ModelBase model) {
-
-		regModels.put(model.modelId, model);
-
+	public static void registerModelPart(EntityModelPart emp) {
+		
+		modelParts.add(emp);
+		
 	}
+	
+	public static void applyModel(ModelEntity modelEntity) {
 
-	public void applyModel(Entity ent, String id) {
-
-		entityModels.put(ent, id);
+		entityList.add(modelEntity);
 
 	}
 	
-	private void teleportModel(Entity ent, String id) {
+	public static void registerPlugin(JavaPlugin plugin, String texture) {
+		textureMap.put(plugin, texture);
+	}
+
+	public static void renderModel() {
 		
+		List<ModelEntity> remover = new ArrayList<ModelEntity>();
 		
-		
+		renderer = new BukkitRunnable() {
+
+			public void run() {
+				if (!entityList.isEmpty()) {
+					for (ModelEntity ent : entityList) {
+						if (!ent.isDead() && ent.isRender() && models.containsKey(ent.getModelId())) {
+							if (ent.hasModel()) {
+								ent.teleportModel();
+							} else {
+								ent.generateModel();
+							}
+						}else {
+							ent.remove();
+							remover.add(ent);
+						}
+					}
+					entityList.removeAll(remover);
+					remover.clear();
+				}
+
+			}
+		};
+
+		renderer.runTaskTimer(ModelAPI.plugin, 0, 1);
+
+	}
+	
+	public static ModelBase getModel(String id) {
+		return models.get(id);
+	}
+	
+	public static Map<String, ModelBase> getModelList(){
+		return models;
+	}
+	
+	public static List<EntityModelPart> getModelPartList(){
+		return modelParts;
+	}
+	
+	public static Map<JavaPlugin, String> getTextureMap(){
+		return textureMap;
 	}
 
 }
