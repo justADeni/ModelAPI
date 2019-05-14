@@ -16,6 +16,8 @@ public class ASI {
 		a.setGravity(false);
 		a.setSilent(true);
 		a.setVisible(false);
+		a.setSmall(true);
+		a.setMarker(true);
 		a.setMetadata("partId", new FixedMetadataValue(ModelAPI.plugin, partId));
 		
 		return a;

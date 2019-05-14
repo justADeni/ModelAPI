@@ -12,7 +12,7 @@ public class PartModel extends ItemModel{
 
 	private double[] rotation = new double[3],
 			translation = {0, -6.4, 0},
-			scale = {1.6, 1.6, 1.6};
+			scale = {2.285, 2.285, 2.285};
 	private List<ModelElement> elements = new ArrayList<ModelElement>();
 	
 	public PartModel(double[] r) {

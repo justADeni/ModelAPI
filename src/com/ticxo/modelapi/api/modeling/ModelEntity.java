@@ -185,14 +185,19 @@ public class ModelEntity {
 	private void updateRotation() {
 		
 		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch()), Math.toRadians(ent.getLocation().getYaw()), 0);
-		if(ent instanceof LivingEntity) {
-			LivingEntity le = (LivingEntity) ent;
-			if(le.isOnGround() && le.getNoDamageTicks() == 0 && preVec != null && !preVec.equals(ent.getLocation().toVector())) {
-				body = new EulerAngle(0, getAngle(ent.getLocation().toVector().subtract(preVec)), 0);
-				preVec = ent.getLocation().toVector();
-			}else {
-				body = new EulerAngle(0, Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50)), 0);
-			}
+		if(preVec != null && !preVec.equals(ent.getLocation().toVector())) {
+			body = new EulerAngle(
+					0,
+					Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), getAngle(ent.getLocation().toVector().subtract(preVec))), -50, 50)),  
+					0
+					);
+			preVec = ent.getLocation().toVector();
+		}else {
+			body = new EulerAngle(
+					0, 
+					Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50)), 
+					0
+					);
 		}
 		
 	}
