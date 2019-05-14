@@ -29,6 +29,12 @@ public class PartModel extends ItemModel{
 		this.elements = elements;
 	}
 	
+	public void addTranslation(double[] translation) {
+		this.translation[0] += translation[0];
+		this.translation[1] += translation[1];
+		this.translation[2] += translation[2];
+	}
+	
 	public ItemModel createPart(String texture) {
 		
 		ItemModel model = new ItemModel();

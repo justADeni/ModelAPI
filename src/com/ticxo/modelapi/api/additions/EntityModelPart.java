@@ -16,7 +16,9 @@ import us.fihgu.toolbox.resourcepack.model.Predicate;
 public class EntityModelPart extends CustomItem implements ModelInjector{
 
 	private String defaultTexture, partName;
-	private double[] rotation = new double[3];
+	private double[] 
+			rotation = new double[3],
+			translation = new double[3];
 	private List<ModelElement> elements = new ArrayList<ModelElement>();
 	private final HashMap<String, Short> overrideModels = new HashMap<String, Short>();
 	
@@ -34,6 +36,10 @@ public class EntityModelPart extends CustomItem implements ModelInjector{
 		addBox(new Element(x, y, z, ox, oy, oz, axis, angle, rx, ry, rz, t, tx, ty));
 	}
 	
+	public void addBox(float x, float y, float z, float ox, float oy, float oz, ModelAxis axis, double angle, float rx, float ry, float rz, int t, int tx, int ty, double bx, double by, double bz) {
+		addBox(new Element(x, y, z, ox, oy, oz, axis, angle, rx, ry, rz, t, tx, ty, bx, by, bz));
+	}
+	
 	public void addBox(Element e) {
 		addBox(e.createModelElement());
 	}
@@ -46,6 +52,12 @@ public class EntityModelPart extends CustomItem implements ModelInjector{
 		rotation[0] = x;
 		rotation[1] = y;
 		rotation[2] = z;
+	}
+	
+	public void addTranslation(double x, double y, double z) {
+		translation[0] = x;
+		translation[1] = y;
+		translation[2] = z;
 	}
 	
 	@Override
@@ -70,6 +82,7 @@ public class EntityModelPart extends CustomItem implements ModelInjector{
 		
 		PartModel model = new PartModel(rotation);
 		model.setElements(elements);
+		model.addTranslation(translation);
 		
 		return model;
 	}

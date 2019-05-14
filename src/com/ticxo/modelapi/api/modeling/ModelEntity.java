@@ -69,14 +69,10 @@ public class ModelEntity {
 		
 		updateRotation();
 		if(skeleton.getHead() != null)
-			teleportModel(skeleton.getHead());
+			teleportModel(skeleton.getHead(), ent);
 		if(skeleton.getBody() != null)
-			teleportModel(skeleton.getBody());
+			teleportModel(skeleton.getBody(), ent);
 		
-	}
-	
-	public void teleportModel(Bone bone) {
-		teleportModel(bone, ent);
 	}
 	
 	public void teleportModel(Bone bone, Entity ent) {
@@ -88,7 +84,11 @@ public class ModelEntity {
 		switch(p.getPartType()) {
 		case BODY:
 			if(ent.equals(this.ent)) {
-				m.teleport(pos.getRelativeLocation(ent.getLocation(), body));
+				Location l = ent.getLocation();
+				l.setYaw(0);
+				l.setPitch(0);
+				l.add(pos.getX(), pos.getY(), pos.getZ());
+				m.teleport(l);
 				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), body));
 			}else {
 				m.teleport(pos.getRelativeLocation(ent.getLocation(), ((ArmorStand) ent).getHeadPose()));
@@ -97,7 +97,11 @@ public class ModelEntity {
 			break;
 		case HEAD:
 			if(ent.equals(this.ent)) {
-				m.teleport(pos.getRelativeLocation(ent.getLocation(), head));
+				Location l = ent.getLocation();
+				l.setYaw(0);
+				l.setPitch(0);
+				l.add(pos.getX(), pos.getY(), pos.getZ());
+				m.teleport(l);
 				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), head));
 			}else {
 				m.teleport(pos.getRelativeLocation(ent.getLocation(), ((ArmorStand) ent).getHeadPose()));
@@ -181,11 +185,14 @@ public class ModelEntity {
 	private void updateRotation() {
 		
 		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch()), Math.toRadians(ent.getLocation().getYaw()), 0);
-		if(preVec != null && !preVec.equals(ent.getLocation().toVector())) {
-			body = new EulerAngle(0, getAngle(ent.getLocation().toVector().subtract(preVec)), 0);
-			preVec = ent.getLocation().toVector();
-		}else {
-			body = new EulerAngle(0, Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50)), 0);
+		if(ent instanceof LivingEntity) {
+			LivingEntity le = (LivingEntity) ent;
+			if(le.isOnGround() && le.getNoDamageTicks() == 0 && preVec != null && !preVec.equals(ent.getLocation().toVector())) {
+				body = new EulerAngle(0, getAngle(ent.getLocation().toVector().subtract(preVec)), 0);
+				preVec = ent.getLocation().toVector();
+			}else {
+				body = new EulerAngle(0, Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50)), 0);
+			}
 		}
 		
 	}

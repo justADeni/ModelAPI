@@ -11,7 +11,6 @@ import us.fihgu.toolbox.item.DamageableItem;
 public class ModelBase {
 
 	private String id, texture;
-	private Offset off;
 	private SkeletonModel skeleton;
 	private Map<String, Part> parts = new HashMap<String, Part>();
 	
@@ -34,20 +33,12 @@ public class ModelBase {
 		this.id = id;
 	}
 	
-	public void setOffset(Offset off) {
-		this.off = off;
-	}
-	
 	public void setSkeletonModel(SkeletonModel skeleton) {
 		this.skeleton = skeleton;
 	}
 	
 	public String getId() {
 		return id;
-	}
-	
-	public Offset getModelOffset() {
-		return off;
 	}
 	
 	public Map<String, Part> getParts(){

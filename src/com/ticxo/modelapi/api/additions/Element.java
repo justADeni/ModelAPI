@@ -25,6 +25,15 @@ public class Element {
 		
 	}
 	
+	public Element(double x, double y, double z, double ox, double oy, double oz, ModelAxis axis, double angle, double rx, double ry, double rz, int t, int tx, int ty, double bx, double by, double bz) {
+		
+		angle = Math.round(angle*(2d/45d));
+		convertBox(x, y, z, ox, oy, oz);
+		createUVs(t, tx, ty, bx, by, bz);
+		setRotation(axis, (int) angle, rx, ry, rz);
+		
+	}
+	
 	public ModelElement createModelElement() {
 		
 		ElementRotation rotation = new ElementRotation(origin, axis, angle, false);
@@ -97,7 +106,7 @@ public class Element {
 		
 	}
 	
-	private void createUVs(float t, float tx, int ty, double x, double y, double z) {
+	private void createUVs(float t, float tx, float ty, double x, double y, double z) {
 		
 		tx *= 16/t;
 		ty *= 16/t;
