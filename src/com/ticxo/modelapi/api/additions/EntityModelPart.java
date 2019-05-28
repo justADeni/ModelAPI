@@ -32,11 +32,11 @@ public class EntityModelPart extends CustomItem implements ModelInjector{
 		setUnbreakableVisibility(false);
 	}
 	
-	public void addBox(float x, float y, float z, float ox, float oy, float oz, ModelAxis axis, double angle, float rx, float ry, float rz, int t, int tx, int ty) {
+	public void addBox(double x, double y, double z, double ox, double oy, double oz, ModelAxis axis, double angle, double rx, double ry, double rz, int t, int tx, int ty) {
 		addBox(new Element(x, y, z, ox, oy, oz, axis, angle, rx, ry, rz, t, tx, ty));
 	}
 	
-	public void addBox(float x, float y, float z, float ox, float oy, float oz, ModelAxis axis, double angle, float rx, float ry, float rz, int t, int tx, int ty, double bx, double by, double bz) {
+	public void addBox(double x, double y, double z, double ox, double oy, double oz, ModelAxis axis, double angle, double rx, double ry, double rz, int t, int tx, int ty, double bx, double by, double bz) {
 		addBox(new Element(x, y, z, ox, oy, oz, axis, angle, rx, ry, rz, t, tx, ty, bx, by, bz));
 	}
 	

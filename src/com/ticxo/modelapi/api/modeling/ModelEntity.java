@@ -1,6 +1,8 @@
 package com.ticxo.modelapi.api.modeling;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -8,13 +10,15 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import com.ticxo.modelapi.ModelAPI;
 import com.ticxo.modelapi.api.ModelManager;
-import com.ticxo.modelapi.math.Quaternion;
+import com.ticxo.modelapi.api.animation.Joint;
 import com.ticxo.modelapi.tool.ASI;
 
 public class ModelEntity {
@@ -23,14 +27,17 @@ public class ModelEntity {
 	private EulerAngle head = new EulerAngle(0, 0, 0);
 	private EulerAngle body = new EulerAngle(0, 0, 0);
 	private Map<Part, ArmorStand> model = new HashMap<Part, ArmorStand>();
+	private Map<Part, Joint> animation = new HashMap<Part, Joint>();
 	private Map<String, Part> parts = new HashMap<String, Part>();
 	private Vector preVec = null;
 	private String modelId;
+	private List<String> state = new ArrayList<String>();
 	private SkeletonModel skeleton;
 	private boolean render = true;
 
 	public ModelEntity(Entity ent, String id, boolean addition) {
 
+		ent.setMetadata("modeled", new FixedMetadataValue(ModelAPI.plugin, true));
 		this.ent = ent;
 		this.modelId = id;
 		setVisible(addition);
@@ -40,6 +47,7 @@ public class ModelEntity {
 
 	public ModelEntity(Entity ent, String id, boolean addition, boolean render) {
 
+		ent.setMetadata("modeled", new FixedMetadataValue(ModelAPI.plugin, true));
 		this.ent = ent;
 		this.modelId = id;
 		this.render = render;
@@ -77,51 +85,19 @@ public class ModelEntity {
 	
 	public void teleportModel(Bone bone, Entity ent) {
 		
-		Part p = parts.get(bone.getName());
-		Offset pos = p.getLocationOffset();
-		ArmorStand m = model.get(p);
+		Part part = parts.get(bone.getName());
+		Joint joint = animation.get(part);
+		ArmorStand target = model.get(part);
 		
-		switch(p.getPartType()) {
-		case BODY:
-			if(ent.equals(this.ent)) {
-				Location l = ent.getLocation();
-				l.setYaw(0);
-				l.setPitch(0);
-				l.add(pos.getX(), pos.getY(), pos.getZ());
-				m.teleport(l);
-				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), body));
-			}else {
-				m.teleport(pos.getRelativeLocation(ent.getLocation(), ((ArmorStand) ent).getHeadPose()));
-				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), ((ArmorStand) ent).getHeadPose()));
-			}
-			break;
-		case HEAD:
-			if(ent.equals(this.ent)) {
-				Location l = ent.getLocation();
-				l.setYaw(0);
-				l.setPitch(0);
-				l.add(pos.getX(), pos.getY(), pos.getZ());
-				m.teleport(l);
-				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), head));
-			}else {
-				m.teleport(pos.getRelativeLocation(ent.getLocation(), ((ArmorStand) ent).getHeadPose()));
-				m.setHeadPose(Quaternion.combine(p.getRotationOffset(), ((ArmorStand) ent).getHeadPose()));
-			}
-			break;
-		case SUBHEAD:
-			m.teleport(pos.getRelativeLocation(ent.getLocation(), ((ArmorStand) ent).getHeadPose()));
-			m.setHeadPose(Quaternion.combine(p.getRotationOffset(), head));
-			break;
-		case SEGMENT:
-			
-			break;
-		default:
-			break;
+		if(ent.equals(this.ent)) {
+			joint.entityParentConnection(ent, target, part, head, body, state);
+		}else {
+			joint.partParentConnection((ArmorStand) ent, target, part, head, body, state);
 		}
 		
 		if(bone.getChilds().isEmpty()) return;
 		for(Bone child : bone.getChilds()) {
-			teleportModel(child, m);
+			teleportModel(child, target);
 		}
 		
 	}
@@ -135,10 +111,23 @@ public class ModelEntity {
 			ArmorStand m = (ArmorStand) ent.getWorld().spawnEntity(partData.getValue().getLocationOffset().getRelativeLocation(ent.getLocation()),EntityType.ARMOR_STAND);
 			m = ASI.applyModel(ASI.iniArmorStand(m, partData.getKey()), partData.getValue());
 			model.put(partData.getValue(), m);
+			animation.put(partData.getValue(), partData.getValue().getJoint().createAnimation());
 		}
 
 	}
+	
+	public void addState(String state) {
+		if(!this.state.contains(state)) this.state.add(state);
+	}
+	
+	public void removeState(String state) {
+		if(this.state.contains(state)) this.state.remove(state);
+	}
 
+	public boolean containState(String state) {
+		return this.state.contains(state);
+	}
+	
 	public Entity getEntity() {
 
 		return ent;
@@ -184,22 +173,25 @@ public class ModelEntity {
 	
 	private void updateRotation() {
 		
-		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch()), Math.toRadians(ent.getLocation().getYaw()), 0);
+		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch() % 360), Math.toRadians(ent.getLocation().getYaw() % 360), 0);
 		if(preVec != null && !preVec.equals(ent.getLocation().toVector())) {
 			body = new EulerAngle(
 					0,
-					Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), getAngle(ent.getLocation().toVector().subtract(preVec))), -50, 50)),  
+					Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), getAngle(ent.getLocation().toVector().subtract(preVec))), -50, 50) + 360) % 360),  
 					0
 					);
 			preVec = ent.getLocation().toVector();
+			removeState("idle");
+			addState("walk");
 		}else {
 			body = new EulerAngle(
 					0, 
-					Math.toRadians(ent.getLocation().getYaw()) + Math.toRadians(clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50)), 
+					Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50) + 360) % 360), 
 					0
 					);
+			removeState("walk");
+			addState("idle");
 		}
-		
 	}
 
 	private boolean isLocationFinite() {

@@ -87,6 +87,10 @@ public class ModelManager {
 		return modelParts;
 	}
 	
+	public static List<ModelEntity> getEntityList(){
+		return entityList;
+	}
+	
 	public static Map<JavaPlugin, String> getTextureMap(){
 		return textureMap;
 	}

@@ -2,12 +2,9 @@ package com.ticxo.modelapi;
 
 import java.util.Map.Entry;
 
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.chrismin13.additionsapi.events.AdditionsAPIInitializationEvent;
@@ -29,17 +26,17 @@ public class Event implements Listener{
 	}
 	
 	@EventHandler
-	public void onAttack(EntityDamageEvent e) {
-		if(e.getEntityType().equals(EntityType.ARMOR_STAND) && e.getEntity().isSilent()) {
-			e.setCancelled(true);
-		}
-	}
-	
-	@EventHandler
-	public void onArmorStandInteract(PlayerArmorStandManipulateEvent e) {
-		ArmorStand a = e.getRightClicked();
-		if(a.hasMetadata("partId")) {
-			e.setCancelled(true);
+	public void onAttack(EntityDamageByEntityEvent e) {
+		if(e.getDamager().hasMetadata("modeled") || e.getEntity().hasMetadata("modeled")) {
+			for(int i = 0; i < ModelManager.getEntityList().size(); i++) {
+				if(e.getDamager().equals(ModelManager.getEntityList().get(i).getEntity())) {
+					ModelManager.getEntityList().get(i).addState("attack");
+					break;
+				}else if(e.getEntity().equals(ModelManager.getEntityList().get(i).getEntity())){
+					ModelManager.getEntityList().get(i).addState("damaged");
+					break;
+				}
+			}
 		}
 	}
 	
