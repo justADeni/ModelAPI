@@ -32,7 +32,7 @@ public class ModelManager {
 	public static void registerModelPart(EntityModelPart emp) {
 		
 		modelParts.add(emp);
-		
+
 	}
 	
 	public static void applyModel(ModelEntity modelEntity) {
