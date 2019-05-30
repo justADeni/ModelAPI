@@ -10,6 +10,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.chrismin13.additionsapi.events.AdditionsAPIInitializationEvent;
 import com.ticxo.modelapi.api.ModelManager;
 import com.ticxo.modelapi.api.additions.EntityModelPart;
+import com.ticxo.modelapi.api.modeling.ModelEntity;
+import com.ticxo.modelapi.api.mythicmobs.ModelMechanic;
+import com.ticxo.modelapi.api.mythicmobs.ModelStateMechanic;
+
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent;
+import io.lumine.xikage.mythicmobs.skills.SkillMechanic;
 
 public class Event implements Listener{
 
@@ -26,17 +32,47 @@ public class Event implements Listener{
 	}
 	
 	@EventHandler
+	public void onMythicMechanicLoad(MythicMechanicLoadEvent e) {
+		SkillMechanic m;
+		switch(e.getMechanicName().toUpperCase()) {
+		case "MODEL":
+			m = new ModelMechanic(e.getContainer(), e.getConfig());
+			e.register(m);
+			break;
+		case "STATE":
+			m = new ModelStateMechanic(e.getContainer(), e.getConfig());
+			e.register(m);
+			break;
+		}
+	}
+	
+	@EventHandler
 	public void onAttack(EntityDamageByEntityEvent e) {
-		if(e.getDamager().hasMetadata("modeled") || e.getEntity().hasMetadata("modeled")) {
-			for(int i = 0; i < ModelManager.getEntityList().size(); i++) {
-				if(e.getDamager().equals(ModelManager.getEntityList().get(i).getEntity())) {
-					ModelManager.getEntityList().get(i).addState("attack");
-					break;
-				}else if(e.getEntity().equals(ModelManager.getEntityList().get(i).getEntity())){
-					ModelManager.getEntityList().get(i).addState("damaged");
-					break;
-				}
-			}
+		ModelEntity attacker = ModelAPI.getModelEntity(e.getDamager());
+		ModelEntity victim = ModelAPI.getModelEntity(e.getEntity());
+		if(attacker != null)
+			switch(e.getCause()) {
+			case ENTITY_ATTACK:
+				attacker.addState("melee attack");
+				break;
+			case PROJECTILE:
+				attacker.addState("range attack");
+				break;
+			default:
+				attacker.addState("attack");
+				break;
+		}
+		if(victim != null)
+			switch(e.getCause()) {
+			case ENTITY_ATTACK:
+				attacker.addState("melee damaged");
+				break;
+			case PROJECTILE:
+				attacker.addState("range damaged");
+				break;
+			default:
+				attacker.addState("damaged");
+				break;
 		}
 	}
 	

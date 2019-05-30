@@ -55,8 +55,16 @@ public class ModelAPI extends JavaPlugin {
 		}
 	}
 	
+	public static ModelEntity spawnEntity(Entity ent, String modelId, boolean addition) {
+		return new ModelEntity(ent, modelId, addition);
+	}
+	
+	public static ModelEntity spawnEntity(Location loc, EntityType type, String modelId, boolean addition) {
+		return spawnEntity(loc.getWorld().spawnEntity(loc, type), modelId, addition);
+	}
+	
 	public static ModelEntity spawnEntity(Entity ent, String pluginId, String name, boolean addition) {
-		return new ModelEntity(ent, pluginId + ":" + name, addition);
+		return spawnEntity(ent, pluginId + ":" + name, addition);
 	}
 	
 	public static ModelEntity spawnEntity(Location loc, EntityType type, String pluginId, String name, boolean addition) {
@@ -69,6 +77,14 @@ public class ModelAPI extends JavaPlugin {
 	
 	public static ModelEntity spawnEntity(Location loc, EntityType type, JavaPlugin plugin, String name, boolean addition) {
 		return spawnEntity(loc, type, plugin.getDescription().getName(), name, addition);
+	}
+	
+	public static ModelEntity getModelEntity(Entity ent) {
+		if(ent.hasMetadata("modeled"))
+			for(int i = 0; i < ModelManager.getEntityList().size(); i++)
+				if(ent.equals(ModelManager.getEntityList().get(i).getEntity()))
+					return ModelManager.getEntityList().get(i);
+		return null;
 	}
 
 }

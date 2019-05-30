@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -60,7 +61,7 @@ public class ModelManager {
 								ent.generateModel();
 							}
 						}else {
-							ent.remove();
+							ent.remove(true);
 							remover.add(ent);
 						}
 					}
@@ -73,6 +74,14 @@ public class ModelManager {
 
 		renderer.runTaskTimer(ModelAPI.plugin, 0, 1);
 
+	}
+	
+	public static Entity revertModel(ModelEntity modelEntity) {
+
+		entityList.remove(modelEntity);
+		modelEntity.remove(false);
+		return modelEntity.getEntity();
+		
 	}
 	
 	public static ModelBase getModel(String id) {

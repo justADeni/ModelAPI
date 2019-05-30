@@ -62,9 +62,22 @@ public class ModelEntity {
 
 	}
 
-	public void remove() {
+	public void setVisible(boolean visible) {
 
-		ent.remove();
+		if (ent instanceof LivingEntity) {
+			LivingEntity le = (LivingEntity) ent;
+			if (visible) {
+				le.removePotionEffect(PotionEffectType.INVISIBILITY);
+			} else {
+				le.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false), true);
+			}
+		}
+
+	}
+
+	public void remove(boolean kill) {
+
+		if(kill) ent.remove();
 		for (Map.Entry<Part, ArmorStand> modelData : model.entrySet()) {
 			if (!modelData.getValue().isDead())
 				modelData.getValue().remove();
@@ -155,19 +168,6 @@ public class ModelEntity {
 	public boolean hasModel() {
 
 		return !model.isEmpty();
-
-	}
-
-	private void setVisible(boolean visible) {
-
-		if (ent instanceof LivingEntity) {
-			LivingEntity le = (LivingEntity) ent;
-			if (visible) {
-				le.removePotionEffect(PotionEffectType.INVISIBILITY);
-			} else {
-				le.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false), true);
-			}
-		}
 
 	}
 	
