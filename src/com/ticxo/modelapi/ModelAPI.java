@@ -37,6 +37,8 @@ public class ModelAPI extends JavaPlugin {
 
 	public void onDisable() {
 
+		ModelManager.removeAllModels();
+		
 		cs.sendMessage("[ModelAPI] Disabled!");
 
 	}

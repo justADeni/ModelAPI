@@ -14,6 +14,12 @@ public class Offset {
 
 	}
 
+	public static Offset lerp(Offset start, Offset end, double t) {
+		
+		return new Offset(start.getX() * (1 - t) + end.getX() * t, start.getY() * (1 - t) + end.getY() * t, start.getZ() * (1 - t) + end.getZ() * t);
+		
+	}
+	
 	public void set(double x, double y, double z) {
 
 		this.x = x;
@@ -27,6 +33,14 @@ public class Offset {
 		this.x += x;
 		this.y += y;
 		this.z += z;
+
+	}
+
+	public void add(Offset o) {
+
+		this.x += o.getX();
+		this.y += o.getY();
+		this.z += o.getZ();
 
 	}
 

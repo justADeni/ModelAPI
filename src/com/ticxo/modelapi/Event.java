@@ -2,9 +2,13 @@ package com.ticxo.modelapi;
 
 import java.util.Map.Entry;
 
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.chrismin13.additionsapi.events.AdditionsAPIInitializationEvent;
@@ -47,6 +51,12 @@ public class Event implements Listener{
 	}
 	
 	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		if(e.getItem() != null && e.getItem().getType().equals(Material.PIG_SPAWN_EGG) && e.getItem().containsEnchantment(Enchantment.DURABILITY) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+			e.setCancelled(true);
+	}
+	
+	@EventHandler
 	public void onAttack(EntityDamageByEntityEvent e) {
 		ModelEntity attacker = ModelAPI.getModelEntity(e.getDamager());
 		ModelEntity victim = ModelAPI.getModelEntity(e.getEntity());
@@ -65,13 +75,13 @@ public class Event implements Listener{
 		if(victim != null)
 			switch(e.getCause()) {
 			case ENTITY_ATTACK:
-				attacker.addState("melee damaged");
+				victim.addState("melee damaged");
 				break;
 			case PROJECTILE:
-				attacker.addState("range damaged");
+				victim.addState("range damaged");
 				break;
 			default:
-				attacker.addState("damaged");
+				victim.addState("damaged");
 				break;
 		}
 	}

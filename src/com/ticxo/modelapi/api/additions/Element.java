@@ -119,7 +119,7 @@ public class Element {
 		setUV(uvs[2], tx + z + x + z, ty + z, x, y, 0);
 		setUV(uvs[3], tx + z + x, ty + z, z, y, 0);
 		setUV(uvs[4], tx + z, ty, x, z, 180);
-		setUV(uvs[5], tx + z + x, ty, x, z, 180);
+		setUV(uvs[5], tx + z + x, ty, x, z, 0);
 		
 	}
 	

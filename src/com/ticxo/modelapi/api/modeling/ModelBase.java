@@ -15,8 +15,8 @@ public class ModelBase {
 	private Map<String, Part> parts = new HashMap<String, Part>();
 	
 	public ModelBase(String id, String texture) {
-		this.id = id;
-		this.texture = texture;
+		this.id = id.toLowerCase();
+		this.texture = texture.toLowerCase();
 	}
 	
 	public void addPart(Part part) {
@@ -24,7 +24,7 @@ public class ModelBase {
 	}
 	
 	public EntityModelPart createPart(String partName, DamageableItem dItem) {
-		EntityModelPart emp = new EntityModelPart(dItem, id + "/" + partName, texture, partName);
+		EntityModelPart emp = new EntityModelPart(dItem, id + "/" + partName.toLowerCase(), texture, partName.toLowerCase());
 		ModelManager.registerModelPart(emp);
 		return emp;
 	}

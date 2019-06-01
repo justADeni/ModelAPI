@@ -76,6 +76,13 @@ public class ModelManager {
 
 	}
 	
+	public static void removeAllModels() {
+		for (ModelEntity ent : entityList) {
+			ent.remove(true);
+		}
+		entityList.clear();
+	}
+	
 	public static Entity revertModel(ModelEntity modelEntity) {
 
 		entityList.remove(modelEntity);
