@@ -1,6 +1,6 @@
 name: ModelAPI
 author: Ticxo
 main: com.ticxo.modelapi.ModelAPI
-version: 0.1
+version: 1.0
 depend: [AdditionsAPI]
 softdepend: [MythicMobs]
