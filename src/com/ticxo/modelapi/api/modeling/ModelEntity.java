@@ -18,7 +18,8 @@ import org.bukkit.util.Vector;
 
 import com.ticxo.modelapi.ModelAPI;
 import com.ticxo.modelapi.api.ModelManager;
-import com.ticxo.modelapi.api.animation.Joint;
+import com.ticxo.modelapi.api.animation.Animation;
+import com.ticxo.modelapi.api.animation.AnimationMap;
 import com.ticxo.modelapi.tool.ASI;
 
 public class ModelEntity {
@@ -27,12 +28,13 @@ public class ModelEntity {
 	private EulerAngle head = new EulerAngle(0, 0, 0);
 	private EulerAngle body = new EulerAngle(0, 0, 0);
 	private Map<Part, ArmorStand> model = new HashMap<Part, ArmorStand>();
-	private Map<Part, Joint> animation = new HashMap<Part, Joint>();
+	//private Map<Part, Animation> animation = new HashMap<Part, Animation>();
 	private Map<String, Part> parts = new HashMap<String, Part>();
 	private Vector preVec = null;
 	private String modelId;
 	private List<String> state = new ArrayList<String>();
 	private SkeletonModel skeleton;
+	private AnimationMap animation;
 	private boolean render = true;
 
 	public ModelEntity(Entity ent, String id, boolean addition) {
@@ -99,14 +101,17 @@ public class ModelEntity {
 	public void teleportModel(Bone bone, Entity ent) {
 		
 		Part part = parts.get(bone.getName());
-		Joint joint = animation.get(part);
 		ArmorStand target = model.get(part);
 		
-		if(ent.equals(this.ent)) {
-			joint.entityParentConnection(ent, target, part, head, body, state);
-		}else {
-			joint.partParentConnection((ArmorStand) ent, target, part, head, body, state);
-		}
+		for(String s : animation.getAnimations().keySet())
+			if(state.contains(s)) {
+				Animation a = animation.getAnimation(s);
+				if(ent.equals(this.ent)) {
+					a.entityParentConnection(ent, target, part, head, body);
+				}else {
+					a.partParentConnection((ArmorStand) ent, target, part, head, body);
+				}
+			}
 		
 		if(bone.getChilds().isEmpty()) return;
 		for(Bone child : bone.getChilds()) {
@@ -117,14 +122,15 @@ public class ModelEntity {
 
 	public void generateModel() {
 
-		skeleton = ModelManager.getModel(modelId).getSkeltonModel();
-		parts = ModelManager.getModel(modelId).getParts();
+		ModelBase mb = ModelManager.getModel(modelId);
+		skeleton = mb.getSkeltonModel();
+		animation = mb.getAnimationTree().getNewAnimationTree();
+		parts = mb.getParts();
 		preVec = ent.getLocation().toVector();
 		for (Map.Entry<String, Part> partData : parts.entrySet()) {
-			ArmorStand m = (ArmorStand) ent.getWorld().spawnEntity(partData.getValue().getLocationOffset().getRelativeLocation(ent.getLocation()),EntityType.ARMOR_STAND);
+			ArmorStand m = (ArmorStand) ent.getWorld().spawnEntity(partData.getValue().getLocationOffset().getRelativeLocation(ent.getLocation()), EntityType.ARMOR_STAND);
 			m = ASI.applyModel(ASI.iniArmorStand(m, partData.getKey()), partData.getValue());
 			model.put(partData.getValue(), m);
-			animation.put(partData.getValue(), partData.getValue().getJoint().createAnimation());
 		}
 
 	}

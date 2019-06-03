@@ -7,18 +7,19 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.chrismin13.additionsapi.events.AdditionsAPIInitializationEvent;
 import com.ticxo.modelapi.api.ModelManager;
 import com.ticxo.modelapi.api.additions.EntityModelPart;
-import com.ticxo.modelapi.api.modeling.ModelEntity;
 import com.ticxo.modelapi.api.mythicmobs.ModelMechanic;
+import com.ticxo.modelapi.api.mythicmobs.ModelStateCondition;
 import com.ticxo.modelapi.api.mythicmobs.ModelStateMechanic;
 
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent;
+import io.lumine.xikage.mythicmobs.skills.SkillCondition;
 import io.lumine.xikage.mythicmobs.skills.SkillMechanic;
 
 public class Event implements Listener{
@@ -51,11 +52,23 @@ public class Event implements Listener{
 	}
 	
 	@EventHandler
+	public void onMythicConditionLoad(MythicConditionLoadEvent e) {
+		SkillCondition m;
+		switch(e.getConditionName().toUpperCase()) {
+		case "STATE":
+			m = new ModelStateCondition(e.getContainer().getConditionArgument(), e.getConfig());
+			e.register(m);
+			break;
+		}
+			
+	}
+	
+	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getItem() != null && e.getItem().getType().equals(Material.PIG_SPAWN_EGG) && e.getItem().containsEnchantment(Enchantment.DURABILITY) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 			e.setCancelled(true);
 	}
-	
+	/*
 	@EventHandler
 	public void onAttack(EntityDamageByEntityEvent e) {
 		ModelEntity attacker = ModelAPI.getModelEntity(e.getDamager());
@@ -84,6 +97,6 @@ public class Event implements Listener{
 				victim.addState("damaged");
 				break;
 		}
-	}
+	}*/
 	
 }

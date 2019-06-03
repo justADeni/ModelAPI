@@ -1,4 +1,4 @@
-package com.ticxo.modelapi.api.animation;
+package com.ticxo.modelapi.api.animation.preset;
 
 import java.util.ArrayList;
 import java.util.List;

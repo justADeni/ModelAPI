@@ -21,7 +21,6 @@ public class ModelStateMechanic extends SkillMechanic implements ITargetedEntity
 		setAsyncSafe(false);
 		
 		state = mlc.getString("state");
-		state = state.substring(1, state.length() - 1);
 		remove = mlc.getBoolean("remove");
 		
 	}

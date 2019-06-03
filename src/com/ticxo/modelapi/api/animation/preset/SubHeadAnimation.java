@@ -1,25 +1,23 @@
-package com.ticxo.modelapi.api.animation.joints;
-
-import java.util.List;
+package com.ticxo.modelapi.api.animation.preset;
 
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.EulerAngle;
 
-import com.ticxo.modelapi.api.animation.Joint;
+import com.ticxo.modelapi.api.animation.Animation;
 import com.ticxo.modelapi.api.modeling.Offset;
 import com.ticxo.modelapi.api.modeling.Part;
 import com.ticxo.modelapi.math.Quaternion;
 
-public class SubHeadJoint implements Joint{
+public class SubHeadAnimation implements Animation{
 
 	@Override
-	public void entityParentConnection(Entity parent, ArmorStand target, Part part, EulerAngle head, EulerAngle body, List<String> state) {
+	public void entityParentConnection(Entity parent, ArmorStand target, Part part, EulerAngle head, EulerAngle body) {
 		
 	}
 
 	@Override
-	public void partParentConnection(ArmorStand parent, ArmorStand target, Part part, EulerAngle head, EulerAngle body, List<String> state) {
+	public void partParentConnection(ArmorStand parent, ArmorStand target, Part part, EulerAngle head, EulerAngle body) {
 		
 		Offset pos = part.getLocationOffset();
 		
@@ -29,8 +27,8 @@ public class SubHeadJoint implements Joint{
 	}
 
 	@Override
-	public Joint createAnimation() {
-		return new SubHeadJoint();
+	public Animation createAnimation() {
+		return new SubHeadAnimation();
 	}
 
 }

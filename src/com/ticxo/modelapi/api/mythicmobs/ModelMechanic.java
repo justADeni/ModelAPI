@@ -23,7 +23,6 @@ public class ModelMechanic extends SkillMechanic implements ITargetedEntitySkill
 		setAsyncSafe(false);
 		
 		modelId = mlc.getString(new String[] {"mid", "model", "modelid"});
-		modelId = modelId.substring(1, modelId.length() - 1);
 		addon = mlc.getBoolean(new String[] {"add", "addon"}, false);
 		
 	}

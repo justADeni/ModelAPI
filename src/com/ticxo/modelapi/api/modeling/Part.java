@@ -5,53 +5,47 @@ import org.bukkit.util.EulerAngle;
 
 import com.chrismin13.additionsapi.items.CustomItemStack;
 import com.ticxo.modelapi.api.additions.EntityModelPart;
-import com.ticxo.modelapi.api.animation.Joint;
 import com.ticxo.modelapi.math.Quaternion;
 
-public class Part implements Cloneable {
+public class Part {
 
 	private String modelName;
 	private EntityModelPart model;
 	private Offset pos;
 	private EulerAngle rot;
-	private Joint type;
 
-	public Part(EntityModelPart model, String modelName, Offset pos, Quaternion rot, Joint type) {
+	public Part(EntityModelPart model, String modelName, Offset pos, Quaternion rot) {
 
 		this.model = model;
 		this.pos = pos;
 		this.rot = Quaternion.toEuler(rot);
-		this.type = type;
 		this.modelName = modelName;
 
 	}
 
-	public Part(EntityModelPart model, Offset pos, Quaternion rot, Joint type) {
+	public Part(EntityModelPart model, Offset pos, Quaternion rot) {
 
 		this.model = model;
 		this.pos = pos;
 		this.rot = Quaternion.toEuler(rot);
-		this.type = type;
 		this.modelName = model.getIdName().split(":")[1];
 
 	}
 
-	public Part(EntityModelPart model, String modelName, Offset pos, EulerAngle rot, Joint type) {
+	public Part(EntityModelPart model, String modelName, Offset pos, EulerAngle rot) {
 
 		this.model = model;
 		this.pos = pos;
 		this.rot = rot;
-		this.type = type;
 		this.modelName = modelName;
 
 	}
 
-	public Part(EntityModelPart model, Offset pos, EulerAngle rot, Joint type) {
+	public Part(EntityModelPart model, Offset pos, EulerAngle rot) {
 
 		this.model = model;
 		this.pos = pos;
 		this.rot = rot;
-		this.type = type;
 		this.modelName = model.getIdName().split(":")[1];
 
 	}
@@ -67,10 +61,6 @@ public class Part implements Cloneable {
 
 	public EulerAngle getRotationOffset() {
 		return rot;
-	}
-
-	public Joint getJoint() {
-		return type;
 	}
 
 	public String getModelName() {
