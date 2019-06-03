@@ -1,11 +1,11 @@
 package com.ticxo.modelapi.api.animation;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AnimationMap {
 	
-	private Map<String, Animation> nodes = new HashMap<String, Animation>();
+	private Map<String, Animation> nodes = new LinkedHashMap<String, Animation>();
 	
 	public void setNodes(Map<String, Animation> nodes) {
 		this.nodes = nodes;
@@ -25,8 +25,15 @@ public class AnimationMap {
 	
 	public AnimationMap getNewAnimationTree() {
 		AnimationMap am = new AnimationMap();
-		am.setNodes(nodes);
+		am.setNodes(createNodes());
 		return am;
+	}
+	
+	private Map<String, Animation> createNodes(){
+		Map<String, Animation> temp = new LinkedHashMap<String, Animation>();
+		for(String s : nodes.keySet())
+			temp.put(s, nodes.get(s).createAnimation());
+		return temp;
 	}
 	
 }

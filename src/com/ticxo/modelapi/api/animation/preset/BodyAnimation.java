@@ -41,4 +41,9 @@ public class BodyAnimation implements Animation{
 		return new BodyAnimation();
 	}
 
+	@Override
+	public boolean containsPartAnimation(Part part) {
+		return true;
+	}
+
 }

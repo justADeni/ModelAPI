@@ -41,6 +41,11 @@ public class HeadAnimation implements Animation{
 		return new HeadAnimation();
 	}
 
+	@Override
+	public boolean containsPartAnimation(Part part) {
+		return true;
+	}
+
 
 
 }

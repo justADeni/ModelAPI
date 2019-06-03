@@ -45,7 +45,8 @@ public class SequenceAnimation implements Animation {
 		target.setHeadPose(angle);
 		
 		frame++;
-		frame %= animation.getLength();
+		frame %= animation.getLength() + 1;
+		
 	}
 
 	@Override
@@ -64,13 +65,18 @@ public class SequenceAnimation implements Animation {
 		target.setHeadPose(angle);
 		
 		frame++;
-		frame %= animation.getLength();
+		frame %= animation.getLength() + 1;
 		
 	}
 
 	@Override
 	public Animation createAnimation() {
 		return new SequenceAnimation(animation.createSequence(), partType);
+	}
+
+	@Override
+	public boolean containsPartAnimation(Part part) {
+		return true;
 	}
 
 }

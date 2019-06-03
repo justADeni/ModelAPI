@@ -1,7 +1,7 @@
 package com.ticxo.modelapi.api.modeling;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +27,8 @@ public class ModelEntity {
 	private Entity ent;
 	private EulerAngle head = new EulerAngle(0, 0, 0);
 	private EulerAngle body = new EulerAngle(0, 0, 0);
-	private Map<Part, ArmorStand> model = new HashMap<Part, ArmorStand>();
-	//private Map<Part, Animation> animation = new HashMap<Part, Animation>();
-	private Map<String, Part> parts = new HashMap<String, Part>();
+	private Map<Part, ArmorStand> model = new LinkedHashMap<Part, ArmorStand>();
+	private Map<String, Part> parts = new LinkedHashMap<String, Part>();
 	private Vector preVec = null;
 	private String modelId;
 	private List<String> state = new ArrayList<String>();
@@ -102,21 +101,20 @@ public class ModelEntity {
 		
 		Part part = parts.get(bone.getName());
 		ArmorStand target = model.get(part);
-		
+		Animation a = null;
 		for(String s : animation.getAnimations().keySet())
-			if(state.contains(s)) {
-				Animation a = animation.getAnimation(s);
-				if(ent.equals(this.ent)) {
-					a.entityParentConnection(ent, target, part, head, body);
-				}else {
-					a.partParentConnection((ArmorStand) ent, target, part, head, body);
-				}
-			}
+			if(state.contains(s) && animation.getAnimation(s).containsPartAnimation(part))
+				a = animation.getAnimation(s);
+		
+		if(a != null)
+			if(ent.equals(this.ent))
+				a.entityParentConnection(ent, target, part, head, body);
+			else
+				a.partParentConnection((ArmorStand) ent, target, part, head, body);
 		
 		if(bone.getChilds().isEmpty()) return;
-		for(Bone child : bone.getChilds()) {
+		for(Bone child : bone.getChilds())
 			teleportModel(child, target);
-		}
 		
 	}
 

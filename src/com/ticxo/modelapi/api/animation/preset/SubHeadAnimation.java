@@ -31,4 +31,9 @@ public class SubHeadAnimation implements Animation{
 		return new SubHeadAnimation();
 	}
 
+	@Override
+	public boolean containsPartAnimation(Part part) {
+		return true;
+	}
+
 }

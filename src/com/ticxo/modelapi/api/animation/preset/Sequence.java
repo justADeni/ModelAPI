@@ -22,7 +22,7 @@ public class Sequence {
 		int stage = 0;
 		frame %= getLength() + 1;
 		for(int i = keys.size() - 1; i >= 0; i--) {
-			if(frame >= keys.get(i).getFrame()) {
+			if(frame > keys.get(i).getFrame()) {
 				stage = i % (keys.size() - 1);
 				break;
 			}
@@ -40,12 +40,12 @@ public class Sequence {
 		int stage = 0;
 		frame %= getLength() + 1;
 		for(int i = keys.size() - 1; i >= 0; i--) {
-			if(frame >= keys.get(i).getFrame()) {
+			if(frame > keys.get(i).getFrame()) {
 				stage = i % (keys.size() - 1);
 				break;
 			}
 		}
-		
+
 		double t = (frame - keys.get(stage).getFrame()) / (keys.get(stage + 1).getFrame() - keys.get(stage).getFrame());
 		
 		return Offset.lerp(keys.get(stage).getOffset(), keys.get(stage + 1).getOffset(), t);
