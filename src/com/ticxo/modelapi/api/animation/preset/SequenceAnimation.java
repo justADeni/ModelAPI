@@ -13,16 +13,16 @@ import com.ticxo.modelapi.math.Quaternion;
 public class SequenceAnimation implements Animation {
 
 	private Sequence animation;
-	private String partType = "body";
+	private boolean isHead = false;
 	private int frame = 0;
 	
 	public SequenceAnimation(Sequence animation) {
 		this.animation = animation;
 	}
 	
-	public SequenceAnimation(Sequence animation, String partType) {
+	public SequenceAnimation(Sequence animation, boolean isHead) {
 		this.animation = animation;
-		this.partType = partType;
+		this.isHead = isHead;
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class SequenceAnimation implements Animation {
 		
 		target.teleport(l);
 		EulerAngle angle = Quaternion.combine(part.getRotationOffset(), animation.getRotation(frame));
-		if(partType.toLowerCase().equals("head"))
+		if(isHead)
 			angle = Quaternion.combine(angle, head);
 		else
 			angle = Quaternion.combine(angle, body);
@@ -58,7 +58,7 @@ public class SequenceAnimation implements Animation {
 		
 		target.teleport(apos.getRelativeLocation(parent.getLocation(), parent.getHeadPose()));
 		EulerAngle angle = Quaternion.combine(part.getRotationOffset(), animation.getRotation(frame));
-		if(partType.toLowerCase().equals("head"))
+		if(isHead)
 			angle = Quaternion.combine(angle, head);
 		else
 			angle = Quaternion.combine(angle, parent.getHeadPose());
@@ -71,7 +71,7 @@ public class SequenceAnimation implements Animation {
 
 	@Override
 	public Animation createAnimation() {
-		return new SequenceAnimation(animation.createSequence(), partType);
+		return new SequenceAnimation(animation.createSequence(), isHead);
 	}
 
 	@Override
