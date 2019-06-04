@@ -29,6 +29,8 @@ public class ModelAPI extends JavaPlugin {
 		cs = Bukkit.getServer().getConsoleSender();
 		
 		pm.registerEvents(new Event(), this);
+		if(pm.getPlugin("MythicMobs") != null)
+			pm.registerEvents(new MythicMobsEvents(), this);
 		
 		cs.sendMessage("[ModelAPI] Enabled!");
 		

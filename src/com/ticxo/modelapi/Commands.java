@@ -35,7 +35,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 				if(args.length != 1) return false;
 				if (ModelManager.getModel(args[0]) != null) {
 					ModelAPI.spawnEntity(player, args[0], false);
-					sender.sendMessage(ChatColor.GREEN + "You are not disguised as " + args[0].split(":")[1] + " from " + args[0].split(":")[0] + ".");
+					sender.sendMessage(ChatColor.GREEN + "You are now disguised as " + args[0].split(":")[1] + " from " + args[0].split(":")[0] + ".");
 				} else
 					sender.sendMessage(ChatColor.RED + "Model " + args[0].split(":")[1] + " does not exist in " + args[0].split(":")[0] + ".");
 				break;

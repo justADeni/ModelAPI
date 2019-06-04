@@ -90,6 +90,8 @@ public class ModelEntity {
 	public void teleportModel() {
 		
 		updateRotation();
+		if(animation == null)
+			return;
 		if(skeleton.getHead() != null)
 			teleportModel(skeleton.getHead(), ent);
 		if(skeleton.getBody() != null)
@@ -122,7 +124,7 @@ public class ModelEntity {
 
 		ModelBase mb = ModelManager.getModel(modelId);
 		skeleton = mb.getSkeltonModel();
-		animation = mb.getAnimationTree().getNewAnimationTree();
+		animation = mb.getAnimationTree() != null ? mb.getAnimationTree().getNewAnimationTree() : null;
 		parts = mb.getParts();
 		preVec = ent.getLocation().toVector();
 		for (Map.Entry<String, Part> partData : parts.entrySet()) {
@@ -182,21 +184,14 @@ public class ModelEntity {
 	private void updateRotation() {
 		
 		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch() % 360), Math.toRadians(ent.getLocation().getYaw() % 360), 0);
-		if(preVec != null && !preVec.equals(ent.getLocation().toVector())) {
-			body = new EulerAngle(
-					0,
-					Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), getAngle(ent.getLocation().toVector().subtract(preVec))), -50, 50) + 360) % 360),  
-					0
-					);
+		if(preVec != null && !preVec.equals(ent.getLocation().toVector().setY(0))) {
+			body = new EulerAngle(0, Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), getAngle(ent.getLocation().toVector().subtract(preVec))), -50, 50) + 360) % 360), 0);
 			preVec = ent.getLocation().toVector();
+			preVec.setY(0);
 			removeState("idle");
 			addState("walk");
 		}else {
-			body = new EulerAngle(
-					0, 
-					Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50) + 360) % 360), 
-					0
-					);
+			body = new EulerAngle(0, Math.toRadians((ent.getLocation().getYaw() + clamp(angleDiff(Math.toRadians(ent.getLocation().getYaw()), body.getY()), -50, 50) + 360) % 360), 0);
 			removeState("walk");
 			addState("idle");
 		}
