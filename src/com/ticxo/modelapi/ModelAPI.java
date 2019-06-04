@@ -20,7 +20,8 @@ public class ModelAPI extends JavaPlugin {
 	
 	private static PluginManager pm;
 	private static ConsoleCommandSender cs; 
-
+	private static Commands commands = new Commands();
+	
 	public void onEnable() {
 
 		plugin = this;
@@ -30,6 +31,10 @@ public class ModelAPI extends JavaPlugin {
 		pm.registerEvents(new Event(), this);
 		
 		cs.sendMessage("[ModelAPI] Enabled!");
+		
+		getCommand("disguise").setExecutor(commands);
+		getCommand("undisguise").setExecutor(commands);
+		getCommand("state").setExecutor(commands);
 		
 		ModelManager.renderModel();
 		

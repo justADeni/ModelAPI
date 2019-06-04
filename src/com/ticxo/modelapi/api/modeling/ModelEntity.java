@@ -175,6 +175,10 @@ public class ModelEntity {
 
 	}
 	
+	public List<String> getStates(){
+		return state;
+	}
+	
 	private void updateRotation() {
 		
 		head = new EulerAngle(Math.toRadians(ent.getLocation().getPitch() % 360), Math.toRadians(ent.getLocation().getYaw() % 360), 0);

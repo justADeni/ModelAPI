@@ -86,6 +86,7 @@ public class ModelManager {
 	public static Entity revertModel(ModelEntity modelEntity) {
 
 		entityList.remove(modelEntity);
+		modelEntity.setVisible(true);
 		modelEntity.remove(false);
 		return modelEntity.getEntity();
 		
