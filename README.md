@@ -1,6 +1,6 @@
 DISCLAIMER: This is not my original project, it was [forked from this repository](https://gitlab.com/Ticxo/ModelAPI)
 
-original author: [Ticxo gitlab](https://gitlab.com/Ticxo) [Ticxo github](https://github.com/Ticxo)
+original author: [[Ticxo gitlab]](https://gitlab.com/Ticxo) [[Ticxo github]](https://github.com/Ticxo)
 
 # Welcome to the GitLab page of ModelAPI.
 
