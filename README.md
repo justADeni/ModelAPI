@@ -11,7 +11,10 @@ server experience.
 
 Latest tag
 [![](https://jitpack.io/v/justADeni/ModelAPI.svg)](https://jitpack.io/#justADeni/ModelAPI)
-# Import
+
+ModelAPI also depends on [AdditionsAPI](https://github.com/chrismin13/AdditionsAPI)
+
+# Import ModelAPI
 
 ## Maven
 ```xml
