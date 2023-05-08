@@ -12,7 +12,7 @@
     <name>ModelAPI</name>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>ASCII</project.build.sourceEncoding>
     </properties>
 
@@ -71,13 +71,13 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.4-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.chrismin13</groupId>
+            <groupId>com.github.justADeni</groupId>
             <artifactId>AdditionsAPI</artifactId>
-            <version>v1.3.3-1.13-1.14</version>
+            <version>c18e43f187</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

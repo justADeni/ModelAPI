@@ -64,7 +64,8 @@ public class ModelEntity {
 
 	public void setVisible(boolean visible) {
 
-		if (ent instanceof LivingEntity le) {
+		if (ent instanceof LivingEntity) {
+			LivingEntity le = (LivingEntity) ent;
 			//TODO: replace this with .setInvisible() maybe?
 			if (visible) {
 				le.removePotionEffect(PotionEffectType.INVISIBILITY);
